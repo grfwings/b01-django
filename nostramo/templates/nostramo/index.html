@@ -1,0 +1,56 @@
+{% extends "nostramo/base.html" %}
+
+{% load static %}
+
+{% block title %}Between (The) Zero And (The) One{% endblock %}
+
+{% block content %}
+<main class="flex justify-center text-teal-200 blue-border p-2 gap-2">
+	<div class="w-4/5 flex flex-col p-0">
+		<div class="blue-border text-center p-1">
+			<h2 class="text-2xl font-bold">BETWEEN (THE) ZERO AND (THE) ONE</h2>
+		</div>
+		<nav class="flex p-1 text-teal-200 hover:text-teal-400">
+			<a class="navbtn" href="">
+				<img src="{% static 'nostramo/images/navbtn-02.svg' %}">
+				<p class="absolute ">INDEX</p>
+			</a>
+			<a class="navbtn" href="about/">
+				<img src="{% static 'nostramo/images/navbtn-02.svg' %}">
+				<p class="absolute ">ABOUT</p>
+			</a>
+			<a class="navbtn" href="sitemap/">
+				<img src="{% static 'nostramo/images/navbtn-02.svg' %}">
+				<p class="absolute ">SITEMAP</p>
+			</a>
+			<a class="navbtn" href="login/">
+				<img src="{% static 'nostramo/images/navbtn-02.svg' %}">
+				<p class="absolute ">LOGIN</p>
+			</a>
+		</nav>
+		<div class="space-h-4 flex justify-center">
+			{% load static %}
+			<img class="max-w-full h-auto" src="{% static 'nostramo/images/sample_image.gif' %}" alt="Sample Image">
+		</div>
+	</div>
+	<div class="w-1/5 text-2xl flex flex-col blue-border p-0">
+		<p class="font-bold text-center ">TIME FROM #7</p>
+		<div id="clock" class="border-2 m-2 border-teal-200 text-center text-xl font-bold text-teal-200"></div>
+		<div id="globeViz"></div>
+	</div>
+</main>
+
+<script>
+	$(document).ready(function () {
+		function updateClock() {
+			const now = new Date();
+			const timeString = now.toLocaleTimeString('en-US', { hour12: false }) + '.' + now.getMilliseconds().toString().padStart(3, '0');
+			$('#clock').text(timeString);
+		}
+
+		setInterval(updateClock, 50);
+
+		updateClock();
+	});
+</script>
+{% endblock %}

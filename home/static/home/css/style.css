@@ -18,6 +18,7 @@ body {
 	box-shadow: 2px 2px #ccc;
 	background: #FFFFFF;
 	font-family: 'Univers LT Pro', -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+	font-family: 'JetBrains Mono', monospace;
 	font-weight: normal;
 	overflow-x: hidden;
 	color: #000; 
@@ -76,16 +77,13 @@ nav .nav-btn:hover {
     box-shadow: 2px 2px #bbb;
 }
 
+.flex-measure-36 {
+	flex 0 0 36;
+}
+
 .page-title {
     font-weight: bold;
     text-align: center;
-    margin: 1rem 0;
-}
-
-.separator {
-    width: 100%;
-    height: 2px;
-    background-color: black;
     margin: 1rem 0;
 }
 
@@ -97,7 +95,6 @@ nav .nav-btn:hover {
 }
 
 .text-box {
-    width: 60%;
     padding: 1rem;
     border: 1px solid #ccc;
     box-shadow: 2px 2px #bbb;
@@ -118,4 +115,52 @@ nav .nav-btn:hover {
     height: auto;
     display: block;
     margin: 0 auto;
+}
+
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border: 0.1rem solid #ddd;
+}
+
+.info-table th, .info-table td {
+	padding: 0.3rem 0.6rem 0;
+    border-bottom: 0.1rem solid #ddd;
+    text-align: left;
+    vertical-align: top;
+}
+
+.info-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.sm-icon {
+	width: 1em;
+}
+
+.active-icon {
+	display: inline-block; 
+    width: 1em; 
+	height: 1em; 
+	border: 0.1em solid #000; 
+	border-radius: 50%; 
+	background: #ff4136;
+	float: right;
+}
+
+.p-centered {
+	display: block;
+	float: none;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.w100 {
+	width: 100%;
+}
+
+.mr2 {
+	margin-right: 0.4rem;
 }

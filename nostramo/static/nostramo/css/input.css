@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+	background: url("../images/tile.png") center center repeat, #141D22;
+	background-size: 8rem;
+	font-size: 14px;
+}
+
+body {
+	display: block;
+	float: none;
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 80rem;
+	line-height: 1.5rem;
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+	padding: 0.5rem 1rem 0.25rem;
+}
+
+.blue-border {
+	border-width: 0.25rem;
+	border-color: #2783BF;
+}
+
+.navbtn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #FC5548;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+#globeViz {
+	width: 100%;
+	aspect-ratio: 1/1;
+}

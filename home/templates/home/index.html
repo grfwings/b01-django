@@ -1,0 +1,18 @@
+<!-- index.html -->
+{% extends "home/base.html" %}
+
+{% block title %}Between (The) Zero And (The) One{% endblock %}
+
+{% block content %}
+<h2 class="page-title">A digital haunt in an analogue life</h2>
+<div class="divider"></div>
+<div class="content-section columns">
+    <div class="column text-box">
+        <p>Hi! I'm Griffin, a computer programmer based in San Francisco, CA.</p>
+    </div>
+    <div class="column image-box">
+		{% load static %}
+        <img src="{% static 'images/sample_image.gif' %}" alt="Sample Image">
+    </div>
+</div>
+{% endblock %}
