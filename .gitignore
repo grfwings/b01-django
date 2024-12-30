@@ -6,4 +6,7 @@ __pycache__
 db.sqlite3
 media
 htmx.min.js
+*.min.js
 tailwindcss
+ne_110m_admin_0_countries.geojson
+nostramo/static/nostramo/data/

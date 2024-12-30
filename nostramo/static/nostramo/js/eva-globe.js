@@ -2,6 +2,7 @@ import ThreeGlobe from 'https://esm.sh/three-globe?external=three';
 import * as THREE from 'https://esm.sh/three';
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js?external=three';
 
+
 // Gen random data
 const N = 300;
 const gData = [...Array(N).keys()].map(() => ({
@@ -12,7 +13,7 @@ const gData = [...Array(N).keys()].map(() => ({
 }));
 
 
-fetch('../static/nostramo/js/ne_110m_admin_0_countries.geojson').then(res => res.json()).then(countries =>
+fetch('../static/nostramo/data/ne_110m_admin_0_countries.geojson').then(res => res.json()).then(countries =>
 {
 	const Globe = new ThreeGlobe()
 		.globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
