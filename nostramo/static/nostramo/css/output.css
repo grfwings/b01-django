@@ -703,8 +703,8 @@ video {
   width: 0.25rem;
 }
 
-.w-1\/5 {
-  width: 20%;
+.w-1\/4 {
+  width: 25%;
 }
 
 .w-2 {
@@ -715,12 +715,12 @@ video {
   width: 0.75rem;
 }
 
-.w-4 {
-  width: 1rem;
+.w-3\/4 {
+  width: 75%;
 }
 
-.w-4\/5 {
-  width: 80%;
+.w-4 {
+  width: 1rem;
 }
 
 .w-8 {
@@ -773,6 +773,14 @@ video {
 
 .justify-center {
   justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
 }
 
 .gap-1 {

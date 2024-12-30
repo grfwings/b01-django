@@ -17,6 +17,10 @@ function getCityFeatures(N) {
             const data = rows.slice(1); // Data excluding header
 
 			const maxPopulation = 40000000;
+			const minPopulation = 1;
+			
+			const logMaxPop = 18;
+			const logMinPop = 9;
             //const maxPopulation = Math.max(...data.map(row => parseInt(row[9]) || 1));
 
 			const gData = [];
@@ -24,23 +28,21 @@ function getCityFeatures(N) {
             while (gData.length < N) {
                 const randomCity = data[Math.floor(Math.random() * data.length)];
 
-                // Get lat, lng, and population
                 const lat = Number(randomCity[2]);
                 const lng = Number(randomCity[3]);
                 const population = Number(randomCity[9]);
-
-                // Normalize size based on population
-                const normalizedSize = population / maxPopulation;
+				const logPop = Math.log(population);
+				const normalizedSize = (logPop - logMinPop) / (logMaxPop - logMinPop);
 
 				const cityData = {
 					lat: lat,
 					lng: lng,
 					size: normalizedSize,
 					color: ['#d2f8c7', '#caf5ca', '#d8edcc', '#abe3c5'][Math.round(Math.random() * 3)]
-				}
+				};
 
 				gData.push(cityData);
-            }
+			}
 			return gData;
         })
         .catch(error => {
@@ -61,35 +63,47 @@ async function getCountryFeatures() {
 		})
 }
 
+async function getRippleData() {
+    const N = 10;
+    const gData = [...Array(N).keys()].map(() => ({
+      lat: (Math.random() - 0.5) * 180,
+      lng: (Math.random() - 0.5) * 360,
+      maxR: Math.random() * 20 + 3,
+      propagationSpeed: (Math.random()) * 2 + 1,
+      repeatPeriod: Math.random() * 2000 + 200
+    }));
+	return gData;
+}
+
 async function initializeGlobe() {
 
 	const countryFeatures = await getCountryFeatures();
-	const cityFeatures = await getCityFeatures(500);
-	console.log(cityFeatures);
+	const cityFeatures = await getCityFeatures(1000);
+	const rippleData = await getRippleData();
+    const colorInterpolator = t => `rgba(255,100,50,${1-t})`;
 
-	// Gen random data
-	const N = 100;
-	const gData = [...Array(N).keys()].map(() => ({
-		lat: (Math.random() - 0.5) * 180,
-		lng: (Math.random() - 0.5) * 360,
-		size: Math.random() / 3,
-		color: ['#d2f8c7', '#caf5ca', '#d8edcc', '#abe3c5'][Math.round(Math.random() * 3)]
-	}));
-	console.log(gData);
-	
 	const Globe = new ThreeGlobe()
 		.globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
 		.hexPolygonsData(countryFeatures)
-		.hexPolygonResolution(3)
-		.hexPolygonMargin(0.3)
+		.hexPolygonResolution(2)
+		.hexPolygonMargin(0.1)
 		.hexPolygonUseDots(true)
 		.hexPolygonColor(() => `#EA3F61`)
 		.pointsData(cityFeatures)
 		.pointAltitude('size')
-		.pointColor('color');
+		.pointColor('color')
+		.ringsData(rippleData)
+		.ringColor(() => colorInterpolator)
+		.ringMaxRadius('maxR')
+		.ringPropagationSpeed('propagationSpeed')
+		.ringRepeatPeriod('repeatPeriod');
 	
 	const renderer = new THREE.WebGLRenderer( { alpha: true });
 	const container = document.getElementById('globeViz');
+	window.addEventListener('resize', () => {
+		renderer.setSize(container.offsetWidth, container.offsetHeight);
+	});
+
 	renderer.setSize(container.offsetWidth, container.offsetHeight);
 	container.appendChild(renderer.domElement);
 	//renderer.setSize( window.innerWidth, window.innerHeight );
@@ -100,15 +114,17 @@ async function initializeGlobe() {
 	scene.add(new THREE.AmbientLight(0xcccccc, Math.PI));
 	scene.add(new THREE.DirectionalLight(0xffffff, 0.6 * Math.PI));
 	
-	const camera = new THREE.PerspectiveCamera( 75, container.innerWidth / container.innerHeight, 0.1, 1000 );
+	const camera = new THREE.PerspectiveCamera( 75, container.innerWidthGG / container.innerHeight, 0.1, 1000 );
 	camera.aspect = 1/1;
 	camera.updateProjectionMatrix();
-	camera.position.z = 200;
+	camera.position.z = 250;
 
 	function animate() { // IIFE
 		// Frame cycle
-		Globe.rotation.x += 0.01;
-		Globe.rotation.y += 0.01;
+		const rotX = 0.000;
+		const rotY = 0.005;
+		Globe.rotation.x += rotX;
+		Globe.rotation.y += rotY;
 		renderer.render(scene, camera);
 	}
 
