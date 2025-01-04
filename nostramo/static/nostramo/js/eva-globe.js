@@ -1,8 +1,7 @@
 import ThreeGlobe from 'https://esm.sh/three-globe?external=three';
 import * as THREE from 'https://esm.sh/three';
-import { TrackballControls } from 'three/addons/controls/TrackballControls.js?external=three';
 
-function getCityFeatures(N) {
+function getCityFeatures() {
     return fetch('../static/nostramo/data/worldcities.csv')
         .then(response => {
             if (!response.ok) {
@@ -19,10 +18,11 @@ function getCityFeatures(N) {
 			const maxPopulation = 40000000;
 			const minPopulation = 1;
 			
-			const logMaxPop = 18;
+			const logMaxPop = 20;
 			const logMinPop = 9;
             //const maxPopulation = Math.max(...data.map(row => parseInt(row[9]) || 1));
 
+			const N = 1000;
 			const gData = [];
 
             while (gData.length < N) {
@@ -45,10 +45,10 @@ function getCityFeatures(N) {
 			}
 			return gData;
         })
-        .catch(error => {
-            console.error('Error fetching or processing CSV:', error);
+		.catch(error => {
+			console.error('Error fetching or processing CSV:', error);
 			return [];
-        });
+		});
 }
 
 async function getCountryFeatures() {
@@ -64,40 +64,54 @@ async function getCountryFeatures() {
 }
 
 async function getRippleData() {
-    const N = 10;
-    const gData = [...Array(N).keys()].map(() => ({
-      lat: (Math.random() - 0.5) * 180,
-      lng: (Math.random() - 0.5) * 360,
-      maxR: Math.random() * 20 + 3,
-      propagationSpeed: (Math.random()) * 2 + 1,
-      repeatPeriod: Math.random() * 2000 + 200
-    }));
+	const N = 10;
+	const gData = [...Array(N).keys()].map(() => ({
+		lat: (Math.random() - 0.5) * 180,
+		lng: (Math.random() - 0.5) * 360,
+		maxR: Math.random() * 20 + 3,
+		propagationSpeed: (Math.random()) * 2 + 1,
+		repeatPeriod: Math.random() * 2000 + 200
+	}));
 	return gData;
 }
 
 async function initializeGlobe() {
 
 	const countryFeatures = await getCountryFeatures();
-	const cityFeatures = await getCityFeatures(1000);
+	const cityFeatures = await getCityFeatures();
 	const rippleData = await getRippleData();
-    const colorInterpolator = t => `rgba(255,100,50,${1-t})`;
+	const colorInterpolator = t => `rgba(255,100,50,${1-t})`;
+	const texture = new THREE.TextureLoader().load('../static/nostramo/images/HexagonTile_DIFF.png', (texture) => {
+		texture.colorSpace = THREE.SRGBColorSpace;
+		texture.wrapS = THREE.RepeatWrapping;
+		texture.wrapT = THREE.RepeatWrapping;
+		texture.repeat.set(10,10);
+		//globeMaterial.specularMap = texture;
+		//globeMaterial.specular = new THREE.Color('grey');
+		//globeMaterial.shininess = 15;
+
+	});
+	const globeMaterial = new THREE.MeshBasicMaterial({
+		map: texture,
+	});
 
 	const Globe = new ThreeGlobe()
-		.globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
-		.hexPolygonsData(countryFeatures)
-		.hexPolygonResolution(2)
-		.hexPolygonMargin(0.1)
-		.hexPolygonUseDots(true)
-		.hexPolygonColor(() => `#EA3F61`)
-		.pointsData(cityFeatures)
-		.pointAltitude('size')
-		.pointColor('color')
-		.ringsData(rippleData)
-		.ringColor(() => colorInterpolator)
-		.ringMaxRadius('maxR')
-		.ringPropagationSpeed('propagationSpeed')
-		.ringRepeatPeriod('repeatPeriod');
-	
+	.globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
+	.bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+	//.globeMaterial(globeMaterial)
+	.hexPolygonsData(countryFeatures)
+	.hexPolygonResolution(2)
+	.hexPolygonMargin(0.1)
+	.hexPolygonColor(() => `#EA3F61`)
+	.pointsData(cityFeatures)
+	.pointAltitude('size')
+	.pointColor('color')
+	.ringsData(rippleData)
+	.ringColor(() => colorInterpolator)
+	.ringMaxRadius('maxR')
+	.ringPropagationSpeed('propagationSpeed')
+	.ringRepeatPeriod('repeatPeriod')
+
 	const renderer = new THREE.WebGLRenderer( { alpha: true });
 	const container = document.getElementById('globeViz');
 	window.addEventListener('resize', () => {
@@ -108,12 +122,12 @@ async function initializeGlobe() {
 	container.appendChild(renderer.domElement);
 	//renderer.setSize( window.innerWidth, window.innerHeight );
 	//document.body.appendChild( renderer.domElement );
-	
+
 	const scene = new THREE.Scene();
 	scene.add(Globe);
-	scene.add(new THREE.AmbientLight(0xcccccc, Math.PI));
+	scene.add(new THREE.AmbientLight(0xCCCCCC, Math.PI));
 	scene.add(new THREE.DirectionalLight(0xffffff, 0.6 * Math.PI));
-	
+
 	const camera = new THREE.PerspectiveCamera( 75, container.innerWidthGG / container.innerHeight, 0.1, 1000 );
 	camera.aspect = 1/1;
 	camera.updateProjectionMatrix();
@@ -121,7 +135,7 @@ async function initializeGlobe() {
 
 	function animate() { // IIFE
 		// Frame cycle
-		const rotX = 0.000;
+		const rotX = 0.005;
 		const rotY = 0.005;
 		Globe.rotation.x += rotX;
 		Globe.rotation.y += rotY;
