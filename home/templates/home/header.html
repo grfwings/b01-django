@@ -1,3 +1,4 @@
+{% load static %}
 <header class="container">
 	<div>
 		<h2>Between (The) Zero And (The) One</h2>
@@ -7,9 +8,9 @@
 		<ul class="columns">
 			<li class="column col-2 col-sm-4 col-md-4"><a href="/" class="nav-btn">Index</a></li>
 			<li class="column col-2 col-sm-4 col-md-4"><a href="/about" class="nav-btn">About</a></li>
-			<li class="column col-2 col-sm-4 col-md-4"><a href="/projects" class="nav-btn">Projects</a></li>
+      <li class="column col-2 col-sm-4 col-md-4"><a href="{% static 'home/resume.pdf' %}" class="nav-btn">Resume</a></li>
 			<li class="column col-2 col-sm-4 col-md-4"><a href="/sitemap" class="nav-btn">Sitemap</a></li>
-			<li class="column col-2 col-sm-4 col-md-4"><a href="/status" class="nav-btn">Status</a></li>
+			<li class="column col-2 col-sm-4 col-md-4"><a href="https://jellyfin.betweenzeroand.one" class="nav-btn">Streaming</a></li>
 			<li class="column col-2 col-sm-4 col-md-4"><a href="/login" class="nav-btn">Login</a></li>
 		</ul>
 	</nav>
